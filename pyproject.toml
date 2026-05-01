@@ -1,0 +1,16 @@
+[project]
+name = "rspamd-learn-proxy"
+requires-python = ">= 3.14"
+version = "0.0.1"
+
+dependencies = [
+    "aiohttp ~= 3.13"
+]
+
+[dependency-groups]
+dev = [
+    "pylint~=4.0"
+]
+
+[project.scripts]
+rspamd-learn-proxy = "rspamd_learn_proxy:main"

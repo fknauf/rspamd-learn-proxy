@@ -1,0 +1,13 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "cSpell.words": [
+        "aiohttp",
+        "learnham",
+        "learnspam",
+        "pylint",
+        "pyproject",
+        "rinderher",
+        "RSPAMD",
+        "venv"
+    ]
+}

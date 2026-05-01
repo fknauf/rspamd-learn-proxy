@@ -1,0 +1,12 @@
+services:
+  rspamd-learn-proxy:
+    image: code.rinderher.de/library/rspamd-learn-proxy:latest
+    build: .
+    container_name: rspamd-learn-proxy
+    environment:
+      - TZ=Europe/Berlin
+      - RSPAMD_HOST=localhost
+      - RSPAMD_PORT=11334
+      - SPAM_PORT=9001
+      - HAM_PORT=9002
+      - LOG_LEVEL=INFO
