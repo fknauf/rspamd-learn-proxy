@@ -14,8 +14,8 @@ import aiohttp
 
 RSPAMD_HOST: str = os.environ.get("RSPAMD_HOST", "rspamd")
 RSPAMD_PORT: int = int(os.environ.get("RSPAMD_PORT", "11334"))
-SPAM_PORT:   int = int(os.environ.get("SPAM_PORT", "11334"))
-HAM_PORT:    int = int(os.environ.get("HAM_PORT", "11335"))
+HAM_PORT:    int = int(os.environ.get("HAM_PORT", "9000"))
+SPAM_PORT:   int = int(os.environ.get("SPAM_PORT", "9001"))
 LOG_LEVEL:   str = os.environ.get("LOG_LEVEL", "INFO")
 
 logger = logging.getLogger(__name__)
