@@ -12,11 +12,12 @@ import os
 
 import aiohttp
 
-RSPAMD_HOST: str = os.environ.get("RSPAMD_HOST", "rspamd")
-RSPAMD_PORT: int = int(os.environ.get("RSPAMD_PORT", "11334"))
-HAM_PORT:    int = int(os.environ.get("HAM_PORT", "9000"))
-SPAM_PORT:   int = int(os.environ.get("SPAM_PORT", "9001"))
-LOG_LEVEL:   str = os.environ.get("LOG_LEVEL", "INFO")
+RSPAMD_HOST:     str        = os.environ.get("RSPAMD_HOST", "rspamd")
+RSPAMD_PORT:     int        = int(os.environ.get("RSPAMD_PORT", "11334"))
+RSPAMD_PASSWORD: str | None = os.environ.get("RSPAMD_PASSWORD")
+HAM_PORT:        int        = int(os.environ.get("HAM_PORT", "9000"))
+SPAM_PORT:       int        = int(os.environ.get("SPAM_PORT", "9001"))
+LOG_LEVEL:       str        = os.environ.get("LOG_LEVEL", "INFO")
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,10 @@ async def handle_request(
     try:
         url = f"http://{RSPAMD_HOST}:{RSPAMD_PORT}/{endpoint}"
         data = await reader.read(-1)
-        async with session.post(url, data=data, headers={"Content-Type": "message/rfc822"}) as resp:
+        headers = {"Content-Type": "message/rfc822"}
+        if RSPAMD_PASSWORD:
+            headers["Password"] = RSPAMD_PASSWORD
+        async with session.post(url, data=data, headers=headers) as resp:
             await resp.read()
     except Exception as e:  # pylint: disable=broad-exception-caught
         logger.error("Error forwarding /%s: %s", endpoint, e)

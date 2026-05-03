@@ -1,4 +1,4 @@
-FROM python:3.14-alpine as builder
+FROM python:3.14-alpine AS builder
 
 WORKDIR /build
 COPY pyproject.toml src ./
