@@ -34,22 +34,24 @@ async def handle_request(
 
     logger.debug("learning a message as %s", endpoint)
 
-    try:
-        writer.write_eof()  # half-close write side so the client (nc) sees EOF and closes its end, unblocking read(-1)
-        data = await reader.read(-1)
-        writer.close()
-        await writer.wait_closed()
+    async def body():
+        while chunk := await reader.read(65536):
+            yield chunk
 
+    try:
+        writer.write_eof()  # half-close write side so the client (nc) sees EOF and closes its end, unblocking read()
         url = f"http://{RSPAMD_HOST}:{RSPAMD_PORT}/{endpoint}"
         headers = {"Content-Type": "message/rfc822"}
         if RSPAMD_PASSWORD:
             headers["Password"] = RSPAMD_PASSWORD
-        async with session.post(url, data=data, headers=headers) as resp:
-            body = await resp.text()
+        async with session.post(url, data=body(), headers=headers) as resp:
+            writer.close()
+            await writer.wait_closed()
+            text = await resp.text()
             if resp.status == 200:
                 logger.info("/%s learned successfully", endpoint)
             else:
-                logger.error("rspamd returned HTTP %d for /%s: %s", resp.status, endpoint, body.strip())
+                logger.error("rspamd returned HTTP %d for /%s: %s", resp.status, endpoint, text.strip())
     except Exception as e:  # pylint: disable=broad-exception-caught
         logger.error("Error forwarding /%s: %s", endpoint, e)
 
