@@ -2,6 +2,7 @@ services:
   rspamd-learn-proxy:
     image: code.rinderher.de/library/rspamd-learn-proxy:latest
     build: .
+    pull_policy: daily
     container_name: rspamd-learn-proxy
     environment:
       - TZ=Europe/Berlin
