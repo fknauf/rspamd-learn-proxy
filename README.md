@@ -1,17 +1,20 @@
-# Rspamd-learn-proxy
+# Rspamd-learn-proxy (Obsolete)
+
+**Now that curl's been added, this project is completely obsolete and you should use curl
+instead.**
 
 Proxy container to feed mail that's moved into or out of the spam folder in a Dovecot
 docker container to an rspamd container's learn_spam/learn_ham HTTP endpoints.
 
 ## Motivation
 
-The dovecot docker image contains (at present) very few userland tools. In particular,
-there's no command line HTTP client, there is only netcat. There's also no mktemp, wc, ls,
+The dovecot docker image contains very few userland tools. When this project was written,
+there was no command line HTTP client in it, only netcat. There's also no mktemp, wc, ls,
 and a lot of other things. So sending well-formed HTTP requests directly from the dovecot
-container to the rspamd container is a bit hard.
+container to the rspamd container was a bit hard.
 
 But sending raw mail data to an intermediate container that wraps them in HTTP requests
-and sends them on to rspamd is perfectly doable, so that's what this is.
+and sends them on to rspamd was perfectly doable, so that's what this is.
 
 ## Setup
 
